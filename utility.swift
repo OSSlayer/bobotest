@@ -25,3 +25,7 @@ func printDict(_ dict: [String:Int]) {
     let keys = dict.keys.sorted()
     for key in keys { print("\(key): \(dict[key] ?? -1)") }
 }
+
+func cap(_ str: String) -> String {
+    str.split(separator: " ").map { $0.prefix(1).uppercased() + $0.dropFirst().lowercased() }.joined(separator: " ")
+}

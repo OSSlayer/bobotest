@@ -83,6 +83,6 @@ func help() {
 func printAssets() {
     for (tag,count) in assetCounts {
         guard let name = assetList[tag]?.name else { print("[Asset Error] Could not find asset '\(tag)'.") ; continue }
-        print("\(String(name).capitalized): \(count)")
+        print("\(cap(name)): \(count)")
     }
 }
