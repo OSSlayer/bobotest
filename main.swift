@@ -1,61 +1,62 @@
-var day = 1
-var money = 100
-var earnings = [String:Int]()
-var capturedKids = Set<Int>()
-var escapedKids = Set<Int>()
-var sentenceLength = 0
-var totalMurders = 0
-var latestMurders = 0
-var totalCaptures = 0
-var latestCaptures = 0
-var totalEvasions = 0
-var latestEvasions = 0
-var eventFlag = false
-var laborPool = 0 // don't manually set inside functions. Updates within main game loop
-var laborShortage = 0 // only used if laborPool is inadequate to track shortage amount
-var space = 100 // 1 space = 10 sqft
-var usedSpace = 0
-var unusedSpace: Int { space - usedSpace }
-var forceEndDay = false
+nonisolated(unsafe) var day = 1
+nonisolated(unsafe) var money = 100
+nonisolated(unsafe) var earnings = [String:Int]()
+nonisolated(unsafe) var capturedKids = Set<Int>()
+nonisolated(unsafe) var escapedKids = Set<Int>()
+nonisolated(unsafe) var sentenceLength = 0
+nonisolated(unsafe) var totalMurders = 0
+nonisolated(unsafe) var latestMurders = 0
+nonisolated(unsafe) var totalCaptures = 0
+nonisolated(unsafe) var latestCaptures = 0
+nonisolated(unsafe) var totalEvasions = 0
+nonisolated(unsafe) var latestEvasions = 0
+nonisolated(unsafe) var eventFlag = false
+nonisolated(unsafe) var laborPool = 0 // don't manually set inside functions. Updates within main game loop
+nonisolated(unsafe) var laborShortage = 0 // only used if laborPool is inadequate to track shortage amount
+nonisolated(unsafe) var space = 100 // 1 space = 10 sqft
+nonisolated(unsafe) var usedSpace = 0
+nonisolated(unsafe) var unusedSpace: Int { space - usedSpace }
+nonisolated(unsafe) var forceEndDay = false
 
-var captureChance = 0.66
-var baseCapture = 5 // base amount of kids to capture
-var captureFalloff = 0.404 // pct falloff in amount of available kids to capture
-var captureAttempts = 0
-var captureSuspicion = 0.015 // supicion level increase per capture
+nonisolated(unsafe) var captureChance = 0.66
+nonisolated(unsafe) var baseCapture = 5 // base amount of kids to capture
+nonisolated(unsafe) var captureFalloff = 0.404 // pct falloff in amount of available kids to capture
+nonisolated(unsafe) var captureAttempts = 0
+nonisolated(unsafe) var captureSuspicion = 0.015 // supicion level increase per capture
 func maxCapture() -> Int { I(D(baseCapture) * pow(1 - captureFalloff, captureAttempts)) }
 
-var reportChance = 0.1
-var reportSuppressLevel = 0.0 // decrease the chance for a child to report you
+nonisolated(unsafe) var reportChance = 0.1
+nonisolated(unsafe) var reportSuppressLevel = 0.0 // decrease the chance for a child to report you
 
-var suspicionLevel = 0.0 // increased by various acts
-var activeInvestigation = false
-var investigationThreshold = 0.2 // how suspicious they need to get to begin an investigation
-var investigationSuppressLevel = 0.0 // decrease the chance for their investigation to find you
-var investigationFalloff = 0.075 // defund police so they cant sustain costly investigation
+nonisolated(unsafe) var suspicionLevel = 0.0 // increased by various acts
+nonisolated(unsafe) var activeInvestigation = false
+nonisolated(unsafe) var investigationThreshold = 0.2 // how suspicious they need to get to begin an investigation
+nonisolated(unsafe) var investigationSuppressLevel = 0.0 // decrease the chance for their investigation to find you
+nonisolated(unsafe) var investigationFalloff = 0.075 // defund police so they cant sustain costly investigation
 
-var evadeChance = 0.5
+nonisolated(unsafe) var evadeChance = 0.5
 
-var murderChance = 0.1
-var murderSuspicion = 0.1
-var murderAttempted = false
+nonisolated(unsafe) var murderChance = 0.1
+nonisolated(unsafe) var murderSuspicion = 0.1
+nonisolated(unsafe) var murderAttempted = false
 
-var baseSellChance = 0.66
-var sellChanceFalloff = 0.25
-var salesCount = 0
-var noSale = false
-var salePrice = 60
-var saleSuspicion = 0.0075
-var undercoverChance = 0.02
+nonisolated(unsafe) var baseSellChance = 0.66
+nonisolated(unsafe) var sellChanceFalloff = 0.25
+nonisolated(unsafe) var salesCount = 0
+nonisolated(unsafe) var noSale = false
+nonisolated(unsafe) var salePrice = 60
+nonisolated(unsafe) var saleSuspicion = 0.0075
+nonisolated(unsafe) var undercoverChance = 0.02
 func adjUndercoverChance() -> Double { activeInvestigation ? scaleUp(undercoverChance, suspicionLevel) : undercoverChance }
 func sellChance() -> Double { baseSellChance * pow((1 - sellChanceFalloff), salesCount) }
 
-var massEscapeChance = 0.01
-var escapeChance = 0.01
+nonisolated(unsafe) var massEscapeChance = 0.01
+nonisolated(unsafe) var escapeChance = 0.01
 
 
 // Main Game Loop
 clrScrn()
+print("Bobo's Basement v1.3.0")
 print("Press enter to advance each day.")
 while true {
     forceEndDay = false
@@ -110,7 +111,7 @@ while true {
         let keys = earnings.keys.sorted(by: { earnings[$0] ?? 0 > earnings[$1] ?? 0 })
         print("*** End-of-Day Earnings Report ***")
         for key in keys {
-            print(key.capitalized + ": \(earnings[key]! < 0 ? "-" : "")$\(abs(earnings[key]!))")
+            print(String(key.capitalized) + ": \(earnings[key]! < 0 ? "-" : "")$\(abs(earnings[key]!))")
             money += earnings[key]!
             net += earnings[key]!
         }
@@ -124,4 +125,22 @@ while true {
     checkReport()
     checkInvestigation()
     if eventFlag { check() }
+}
+
+
+func update() {
+    // Update day-by-day variables
+    day += 1
+    eventFlag = false
+    murderAttempted = false
+    noSale = false
+    salesCount = 0
+    captureAttempts = 0
+    suspicionLevel = scaleDown(suspicionLevel, investigationFalloff)
+    
+    otherActions = [:]
+    if assetCounts["sm", default: 0] >= 40 {
+        guard let ss = assetList["ss"] else { print("An unexpected error has occured. [0000]") ; return }
+        otherActions["ss"] = ("Open Sweatshop, \(ss.cost) - \(ss.description)", openSweatshop)
+    }
 }

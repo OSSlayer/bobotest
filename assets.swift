@@ -32,17 +32,17 @@ func removeAsset(_ str: String) {
     assets.remove(at: i)
 }
 
-var assets = [sId]()
-var lockedAssets: Set<sId> = [
+nonisolated(unsafe) var assets = [sId]()
+nonisolated(unsafe) var lockedAssets: Set<sId> = [
     "ss", "ict", "bex", "b2", "b3", "b4", "b5", "ad", "mkt", "lw2", "lw3", "lw4", "lgt", "sg"
 ]
-var assetCounts: [sId:Int] {
+nonisolated(unsafe) var assetCounts: [sId:Int] {
     var output = [String:Int]()
     for a in assets { output[a] = output[a, default: 0] + 1 }
     return output
 }
 
-var assetList: [sId:Asset] = [
+nonisolated let assetList: [sId:Asset] = [
     "wv": .init("White Van", 22500, "Improve kidnapping abilities.", false,
                 buyAction: {
                     captureChance = scaleUp(captureChance, 0.33)

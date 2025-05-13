@@ -1,5 +1,5 @@
-var children = [Child]()
-var childrenIds: Set<Int> {
+nonisolated(unsafe) var children = [Child]()
+nonisolated(unsafe) var childrenIds: Set<Int> {
     var output = Set<Int>()
     for child in children { output.insert(child.id) }
     return output
@@ -28,7 +28,7 @@ class Child {
     }
 }
 
-let boys: Set<String> = [
+nonisolated let boys: Set<String> = [
     "James", "John", "Will", "Charlie", "George", "Joe", "Thomas",
     "Richard", "Albert", "Frank", "Harold", "Walter", "Harry", "Eugene", "Sam",
     "Ralph", "Alfred", "Fred",
@@ -44,7 +44,7 @@ let boys: Set<String> = [
     "Fidel", "Bruce", "Michael", "Aaron", "Jimmy", "Philbert", "David"
 ]
 
-let girls: Set<String> = [
+nonisolated let girls: Set<String> = [
     "Mary", "Elizabeth", "Anna",
     "Grace", "Alice",
     "Martha", "Laura", "Ella",
@@ -57,7 +57,7 @@ let girls: Set<String> = [
     "Ann",
 ]
 
-let lastnames: Set<String> = [
+nonisolated let lastnames: Set<String> = [
     "Smith", "Johnson", "Brown", "Jones", "Miller", "Garcia", "Rodriguez", "Wilson", "Martinez",
     "Jackson", "Thompson", "White", "Lopez",
     "Gonzalez", "Harris", "Perez", "Hall", "Young",
