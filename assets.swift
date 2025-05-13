@@ -42,7 +42,7 @@ nonisolated(unsafe) var assetCounts: [sId:Int] {
     return output
 }
 
-nonisolated let assetList: [sId:Asset] = [
+nonisolated(unsafe) let assetList: [sId:Asset] = [
     "wv": .init("White Van", 22500, "Improve kidnapping abilities.", false,
                 buyAction: {
                     captureChance = scaleUp(captureChance, 0.33)

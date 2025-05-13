@@ -111,7 +111,7 @@ while true {
         let keys = earnings.keys.sorted(by: { earnings[$0] ?? 0 > earnings[$1] ?? 0 })
         print("*** End-of-Day Earnings Report ***")
         for key in keys {
-            print(String(key.capitalized) + ": \(earnings[key]! < 0 ? "-" : "")$\(abs(earnings[key]!))")
+            print(String(key).capitalized + ": \(earnings[key]! < 0 ? "-" : "")$\(abs(earnings[key]!))")
             money += earnings[key]!
             net += earnings[key]!
         }
