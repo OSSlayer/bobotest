@@ -4,14 +4,9 @@ func other() {
     print("*** Other Actions ***")
     for (tag,action) in otherActions { print("[\(tag)] \(action.0)") }
     
-    while true {
-        print("Enter tag to perform action:")
-        let i = input().lowercased()
-        
-        guard let a = otherActions[i] else { print("Invalid tag.") ; return }
-        a.1()
-        break
-    }
+    print("Enter tag to perform action:")
+    guard let a = otherActions[input().lowercased()] else { print("Invalid tag.") ; return }
+    a.1()
 }
 
 func attemptCapture() {

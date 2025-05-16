@@ -93,6 +93,7 @@ while true {
         if i == "other" || i == "o" { other() }
         if i == "save" || i == "sv" { save() }
         if i == "load" || i == "ld" { load() }
+        if i == "info" || i == "i" { infoScreen() }
         //if i == "~!" { devTools() }
     }
     if forceEndDay { continue }
@@ -143,4 +144,6 @@ func update() {
         guard let ss = assetList["ss"] else { print("An unexpected error has occured. [0000]") ; return }
         otherActions["ss"] = ("Open Sweatshop, \(ss.cost) - \(ss.description)", openSweatshop)
     }
+    
+    if day % 20 == 0 { cullChildren() }
 }

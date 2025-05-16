@@ -122,7 +122,7 @@ func checkSentence(_ crimes: [String:(Int,Int,Int)], _ canLeverage: Bool = true)
     if assetCounts["lw3"] ?? 0 > 0 { pleaDeal = 0.33 }
     if assetCounts["lw4"] ?? 0 > 0 { pleaDeal = 0.25 }
     if assetCounts["lgt"] ?? 0 > 0 { pleaDeal = 0.1 }
-    if assetCounts["sg"] ?? 0 > 0 { guiltiness = 0.05 }
+    if assetCounts["sg"] ?? 0 > 0 { pleaDeal = 0.05 }
     for (crime, data) in crimes {
         pleaConvictions[crime] = (I(D(data.0) * pleaDeal), I(D(data.1) * pleaDeal), I(D(data.2) * pleaDeal))
     }
@@ -255,7 +255,7 @@ func checkSentence(_ crimes: [String:(Int,Int,Int)], _ canLeverage: Bool = true)
             checkSentence(newCrimes, false)
             return
         } else {
-            judgeSeverity = 1 - r
+            judgeSeverity = r
         }
     }
     if judgeThreaten {
@@ -274,8 +274,8 @@ func checkSentence(_ crimes: [String:(Int,Int,Int)], _ canLeverage: Bool = true)
     print("The sentencing has begun!")
     check()
     
-    if severity != 1.0 { print("Bobo's lawyers have reduced the punishment by \((1 - severity) * 10)%.") }
-    if judgeSeverity > 0 { print("Bobo's \(judgeThreaten ? "threat" : "bribe") has reduced the punishment by \(judgeSeverity)%.") }
+    if severity != 1.0 { print("Bobo's lawyers have reduced the punishment by \((1 - severity) * 100)%.") }
+    if judgeSeverity > 0 { print("Bobo's \(judgeThreaten ? "threat" : "bribe") has reduced the punishment by \((1-judgeSeverity) * 100)%.") }
     severity = scaleDown(severity, judgeSeverity)
     
     var totalTime = 0

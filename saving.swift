@@ -1,5 +1,18 @@
+import Foundation
+
 func save() {
-    print("Creating save string...\n")
+    let saveString = makeSaveString()
+    let saveURL = URL(fileURLWithPath: "savefile.txt")
+
+    do {
+        try saveString.write(to: saveURL, atomically: true, encoding: .utf8)
+        print("Game saved.")
+    } catch {
+        print("Failed to save game: \(error)")
+    }
+}
+
+func makeSaveString() -> String {
     func s(_ set: Set<Int>) -> String {
         if set.count == 0 { return "!" }
         var str = ""
@@ -32,17 +45,11 @@ func save() {
     for asset in lockedAssets { output += asset + "," }
     if lockedAssets.count > 0 { output = String(output.dropLast(1)) } else { output += "!" }
     
-    print(output)
-    print("\nCreated save string! To load, enter 'load' / 'ld' command and paste the string.")
+    return output
 }
 
-func load() {
-    print("Are you sure you want to load a new game? This will overwrite the current game. [y/n]")
-    print("(Some stats in stats menu may not update until after a day or two are passed in the new game. These do not affect performance.")
-    if input().lowercased() != "y" { return }
-    print("Paste save string:")
-    let s = input()
-    let args = s.split(separator: "/")
+func loadFromString(_ str: String) {
+    let args = str.split(separator: "/")
     
     // 34 variables + 2 for assets + 1 for children
     guard args.count == 37 else {
@@ -155,4 +162,19 @@ func load() {
     print("Loaded game.")
     for _ in 0..<5 { print(".") }
     forceEndDay = true
+}
+
+func load() {
+    print("Are you sure you want to load a new game? This will overwrite the current game. [y/n]")
+    if input().lowercased() != "y" { return }
+    print("Loading game...")
+    
+    do {
+        let str = try String(contentsOfFile: "savefile.txt", encoding: .utf8)
+        loadFromString(str)
+    } catch {
+        print("Failed to load save: \(error)")
+    }
+    
+    
 }

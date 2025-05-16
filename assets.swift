@@ -90,7 +90,7 @@ nonisolated(unsafe) let assetList: [sId:Asset] = [
                      murderSuspicion = scaleDown(murderSuspicion, 0.2)
                  }
                 ),
-    "ss": .init("Sweatshop", 50000, "far more efficient clothes production.", size: 150,
+    "ss": .init("Sweatshop", 50000, "Combine 40 sewing machines for far more efficient clothes production. Uses 50 labor.", size: 150,
                 dayAction: {
                     if laborPool >= 50 {
                         laborPool -= 50
@@ -262,7 +262,7 @@ nonisolated(unsafe) let assetList: [sId:Asset] = [
                      earnings["Legal Expenses"] = earnings["Legal Expenses", default: 0] - 2700
                  }
                 ),
-    "sg": .init("Grade A Lawyer", 690000, "Saul Goodman.", false,
+    "sg": .init("Grade S Lawyer", 690000, "Saul Goodman.", false,
                  buyAction: {
                      removeAsset("lw4")
                  },
